@@ -3,6 +3,7 @@
 ### Installation
 - clone this project
 - run ```cd 52_entertainment```
+- run ```composer install```
 - run ```symfony server:start```
 
 ### You can now send GET requests to :
