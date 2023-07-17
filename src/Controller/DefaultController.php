@@ -57,11 +57,16 @@ final class DefaultController extends AbstractController
             $color = substr($card, -1);
             $rank = substr($card, 0, -1);
 
-            if ($color === $refColor 
-                && $this->compareCards($rank, substr($highestCard, 0, -1)) > 0) {
-                $highestCard = $card;
-            } elseif ($trump && $color === $trump 
+            if (!in_array($color, ['H', 'D', 'S', 'C'])) {
+                throw new \Exception('Invalid color ' . $color);
+            }
+
+            if ($trump && $color === $trump 
                 && (substr($highestCard, -1) !== $trump || $this->compareCards($rank, substr($highestCard, 0, -1)) > 0)) {
+                $highestCard = $card;
+            } elseif ($color === $refColor 
+                && substr($highestCard, -1) !== $trump
+                && $this->compareCards($rank, substr($highestCard, 0, -1)) > 0) {
                 $highestCard = $card;
             }
         }
@@ -74,6 +79,10 @@ final class DefaultController extends AbstractController
         $ranks = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
         $index1 = array_search($rank1, $ranks);
         $index2 = array_search($rank2, $ranks);
+
+        if ($index1 === false || $index2 === false) {
+            throw new \Exception('Invalid rank');
+        }
 
         return $index1 - $index2;
     }
